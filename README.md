@@ -1,14 +1,14 @@
-# Viburnum Theme
+# Vite Starter Theme
 
-Viburnum Theme is a modern WordPress theme that leverages Vite for asset bundling and optimization, designed to provide
+Vite Starter Theme is a modern WordPress theme that leverages Vite for asset bundling and optimization, designed to provide
 a fast and efficient development experience.
 
 ## Features
 
-- **Vite Integration**: Utilizes Vite for fast development and optimized production builds.
-- **Zero Complexity**: Just develop. Vite handles everything.
-- **Optimized Assets**: Automatically minifies and optimizes assets for production.
-- **Tailwind CSS**: Includes Tailwind CSS for rapid development. It is time to use it in WordPress.
+- **Vite Integration**
+- **Tailwind CSS v4**
+- **Zero Complexity**
+- **Optimized Assets**
 
 ## Installation
 

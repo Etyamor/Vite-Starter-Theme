@@ -1,12 +1,20 @@
 import path from 'path';
-import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import { defineConfig } from 'vite';
+import tailwindcss from '@tailwindcss/vite'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 const ROOT = path.resolve('../../../');
 const BASE = __dirname.replace(ROOT, '');
 
 export default defineConfig({
     base: process.env.NODE_ENV === 'production' ? `${BASE}/dist/` : BASE,
+    server: {
+        cors: true,
+    },
+    plugins: [
+        tailwindcss(),
+        ViteImageOptimizer(),
+    ],
     build: {
         manifest: true,
         assetsDir: '.',
@@ -37,7 +45,4 @@ export default defineConfig({
             },
         },
     },
-    plugins: [
-        ViteImageOptimizer(),
-    ],
 });
