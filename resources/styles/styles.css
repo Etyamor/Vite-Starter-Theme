@@ -1,2 +1,10 @@
 @import "tailwindcss";
 @import "./fonts.css";
+
+html {
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background-image: url('../images/medium.webp');
+}
