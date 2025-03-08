@@ -1,5 +1,5 @@
 {
-  "name": "{VITE_STARTER_THEME_SLUG}",
+  "name": "vite-starter-theme",
   "version": "1.0.0",
   "scripts": {
     "build": "vite build",
