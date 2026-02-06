@@ -6,13 +6,13 @@
     "dev": "rimraf ./dist/.vite/manifest.json && vite"
   },
   "devDependencies": {
-    "@fontsource/roboto": "^5.2.5",
-    "@tailwindcss/vite": "^4.0.12",
+    "@fontsource/roboto": "^5.2.8",
+    "@tailwindcss/vite": "^4.1.13",
     "rimraf": "^6.0.1",
-    "sharp": "^0.33.5",
-    "svgo": "^3.3.2",
-    "tailwindcss": "^4.0.12",
-    "vite": "^6.2.1",
-    "vite-plugin-image-optimizer": "^1.1.8"
+    "sharp": "^0.34.4",
+    "svgo": "^4.0.0",
+    "tailwindcss": "^4.1.13",
+    "vite": "^7.1.6",
+    "vite-plugin-image-optimizer": "^2.0.2"
   }
 }
