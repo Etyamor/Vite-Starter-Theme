@@ -58,7 +58,7 @@ The `base` path is dynamically set based on NODE_ENV to handle WordPress subdire
 Fonts and images are imported through CSS, not PHP. Vite parses CSS files to bundle referenced assets.
 
 **Fonts:**
-1. Install fontsource package: `npm install --save fontsource-<font-family>`
+1. Install fontsource package: `npm install --save @fontsource/<font-family>`
 2. Import in `resources/styles/fonts.css`: `@import "@fontsource/<font-family>";`
 
 **Images:**
