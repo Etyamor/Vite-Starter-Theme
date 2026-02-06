@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html <?php language_attributes(); ?>>
-<head>
-    <meta charset="<?php bloginfo('charset'); ?>">
-    <meta name="viewport" content="width=device-width">
-    <?php wp_head(); ?>
-</head>
-<body <?php body_class(); ?>>
-<?php wp_body_open(); ?>
+<?php
+/**
+ * Header Template - Loads actual template from template-parts/
+ */
+get_template_part('template-parts/header');
