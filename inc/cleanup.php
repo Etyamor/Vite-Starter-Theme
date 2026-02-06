@@ -11,5 +11,5 @@ add_action('after_setup_theme', function () {
         wp_dequeue_style('wp-block-library');
         wp_dequeue_style('classic-theme-styles');
         wp_dequeue_style('global-styles');
-    });
+    }, 100);
 });
