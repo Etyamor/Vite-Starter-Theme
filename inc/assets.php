@@ -30,12 +30,13 @@ add_action('wp_enqueue_scripts', function() use ($vite_is_production) {
         $manifest = json_decode(file_get_contents(VITE_THEME_MANIFEST_PATH), true);
         if (is_array($manifest)) {
             foreach ($manifest as $key => $value) {
-                $file = $value['file'];
-                $ext = pathinfo($file, PATHINFO_EXTENSION);
+                $file   = $value['file'];
+                $ext    = pathinfo($file, PATHINFO_EXTENSION);
+                $handle = 'vite-' . sanitize_title($key);
                 if ($ext === 'css') {
-                    wp_enqueue_style($key, VITE_THEME_ASSETS_DIR . '/' . $file, [], $theme_version);
+                    wp_enqueue_style($handle, VITE_THEME_ASSETS_DIR . '/' . $file, [], $theme_version);
                 } elseif ($ext === 'js') {
-                    wp_enqueue_script($key, VITE_THEME_ASSETS_DIR . '/' . $file, [], $theme_version, true);
+                    wp_enqueue_script($handle, VITE_THEME_ASSETS_DIR . '/' . $file, [], $theme_version, true);
                 }
             }
         }
