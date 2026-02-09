@@ -1,5 +1,7 @@
 # Vite Starter Theme
 
+![Screenshot](screenshot.png)
+
 A modern WordPress theme that leverages Vite for asset bundling and Tailwind CSS v4 for styling. Built with a clean, modular architecture for optimal development experience.
 
 ## Features
@@ -18,11 +20,25 @@ A modern WordPress theme that leverages Vite for asset bundling and Tailwind CSS
     ```sh
     npm install
     ```
-3. Build the assets:
+3. Run the setup script to configure your theme:
+    ```sh
+    npm run setup
+    ```
+4. Build the assets:
     ```sh
     npm run build
     ```
-4. Activate the theme from the WordPress admin panel.
+5. Activate the theme from the WordPress admin panel.
+
+## Setup Script
+
+Running `npm run setup` launches an interactive script that personalizes the starter theme for your project. It will:
+
+1. **Collect your theme info** — name, description, author, and author URL. A text domain and slug are derived automatically from the name in kebab-case.
+2. **Apply replacements across the codebase** — updates the `style.css` header, `package.json` name, `README.md` title, welcome page heading, and asset handle prefixes in `inc/assets.php`.
+3. **Swap the default font** — optionally replaces Roboto with any [fontsource](https://fontsource.org) font. Uninstalls the old package, installs the new one, and updates both the import and `font-family` rule in `fonts.css`.
+4. **Remove the welcome page** — optionally deletes the demo welcome page and resets the index template to a blank starting point.
+5. **Clean up after itself** — optionally deletes `setup.js` and removes the `setup` script from `package.json`.
 
 ## Development
 

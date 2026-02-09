@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build": "vite build",
-    "dev": "rimraf ./dist/.vite/manifest.json && vite"
+    "dev": "rimraf ./dist/.vite/manifest.json && vite",
+    "setup": "node setup.js"
   },
   "devDependencies": {
     "@fontsource/roboto": "^5.2.8",

@@ -1,1 +1,5 @@
 @import "@fontsource/roboto";
+
+html {
+  font-family: 'Roboto', sans-serif;
+}
