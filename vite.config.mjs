@@ -25,7 +25,7 @@ export default defineConfig({
         minify: true,
         rollupOptions: {
             input: [
-                'resources/scripts/scripts.js',
+                'resources/scripts/scripts.ts',
                 'resources/styles/styles.css',
             ],
             output: {

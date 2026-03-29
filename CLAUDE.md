@@ -42,7 +42,7 @@ The `inc/assets.php` file handles both modes in a unified way:
 ## Vite Configuration
 
 Entry points (vite.config.mjs:27-30):
-- `resources/scripts/scripts.js` - Main JavaScript entry
+- `resources/scripts/scripts.ts` - Main TypeScript entry
 - `resources/styles/styles.css` - Main CSS entry (imports Tailwind and fonts)
 
 Asset organization in production build:
@@ -84,7 +84,7 @@ Fonts and images are imported through CSS, not PHP. Vite parses CSS files to bun
 - `template-parts/index.php` - Actual index template
 
 ### resources/ Directory (Source Assets)
-- `resources/scripts/` - JavaScript source files
+- `resources/scripts/` - TypeScript source files
 - `resources/styles/` - CSS source files (Tailwind, fonts, custom styles)
 - `resources/images/` - Image assets for Vite processing
 - `resources/fonts/` - Font files (if not using fontsource packages)
