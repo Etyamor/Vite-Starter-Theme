@@ -1,6 +1,7 @@
 {
   "name": "vite-starter-theme",
   "version": "1.0.0",
+  "license": "GPL-2.0-or-later",
   "scripts": {
     "build": "vite build",
     "dev": "rimraf ./dist/.vite/manifest.json && vite",
