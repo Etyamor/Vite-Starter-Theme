@@ -1,5 +1,5 @@
 <!-- Quick Tips Section -->
-<div class="grid gap-6 md:grid-cols-2">
+<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
     <div class="rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white shadow-lg">
         <h3 class="mb-4 text-2xl font-bold">Adding Fonts</h3>
         <div class="space-y-3">
@@ -22,6 +22,24 @@
                 <code class="text-sm">.hero {<br>&nbsp;&nbsp;background-image: url('../images/hero.webp');<br>}</code>
             </div>
             <p class="text-sm text-purple-50">Vite will automatically process and optimize them during build.</p>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-gradient-to-br from-green-500 to-green-600 p-6 text-white shadow-lg">
+        <h3 class="mb-4 text-2xl font-bold">Code Quality</h3>
+        <div class="space-y-3">
+            <p class="text-green-50">Run all checks at once:</p>
+            <div class="rounded-lg bg-green-900/50 p-3">
+                <code class="text-sm">npm run lint</code>
+            </div>
+            <p class="text-green-50">Auto-fix PHP code style:</p>
+            <div class="rounded-lg bg-green-900/50 p-3">
+                <code class="text-sm">npm run lint:php:fix</code>
+            </div>
+            <p class="text-green-50">TypeScript type checking:</p>
+            <div class="rounded-lg bg-green-900/50 p-3">
+                <code class="text-sm">npm run typecheck</code>
+            </div>
         </div>
     </div>
 </div>

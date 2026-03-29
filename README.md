@@ -2,16 +2,19 @@
 
 ![Screenshot](screenshot.png)
 
-A modern WordPress theme that leverages Vite for asset bundling and Tailwind CSS v4 for styling. Built with a clean, modular architecture for optimal development experience.
+A modern WordPress theme that leverages Vite for asset bundling, Tailwind CSS v4 for styling, and TypeScript for scripts. Includes PHPStan and PHPCS for code quality out of the box.
 
 ## Features
 
-- **⚡ Vite Integration** - Lightning-fast HMR and optimized builds
-- **🎨 Tailwind CSS v4** - Latest Tailwind with native CSS layer support
-- **📦 Modular Architecture** - Organized file structure with clear separation of concerns
-- **🚀 Dual-Mode Asset Loading** - Automatic switching between dev and production
-- **🧹 WordPress Cleanup** - Removes unnecessary WordPress bloat
-- **🖼️ Optimized Assets** - Automatic image optimization and asset hashing
+- **Vite Integration** - Lightning-fast HMR and optimized builds
+- **Tailwind CSS v4** - Latest Tailwind with native CSS layer support
+- **TypeScript** - Type-safe scripts with strict mode enabled
+- **PHPStan Level 5** - Static analysis with WordPress-aware rules
+- **PHPCS + WPCS** - WordPress coding standards enforcement
+- **Modular Architecture** - Organized file structure with clear separation of concerns
+- **Dual-Mode Asset Loading** - Automatic switching between dev and production
+- **WordPress Cleanup** - Removes unnecessary WordPress bloat
+- **Optimized Assets** - Automatic image optimization and asset hashing
 
 ## Installation
 
@@ -19,6 +22,7 @@ A modern WordPress theme that leverages Vite for asset bundling and Tailwind CSS
 2. Navigate to the theme directory and install dependencies:
     ```sh
     npm install
+    composer install
     ```
 3. Run the setup script to configure your theme:
     ```sh
@@ -63,6 +67,36 @@ npm run build
 
 This creates optimized assets in the `dist/` directory with hashed filenames.
 
+## Code Quality
+
+All linting commands are available as npm scripts:
+
+| Command | Description |
+|---|---|
+| `npm run lint` | Run PHPCS and PHPStan together |
+| `npm run lint:php` | Check PHP code against WordPress coding standards |
+| `npm run lint:php:fix` | Auto-fix PHPCS violations where possible |
+| `npm run lint:types` | Run PHPStan static analysis (level 5) |
+| `npm run typecheck` | Run TypeScript type checking |
+
+### PHPStan
+
+Static analysis is configured at level 5 with the [phpstan-wordpress](https://github.com/szepeviktor/phpstan-wordpress) extension, which understands WordPress hooks, functions, and globals.
+
+Configuration: `phpstan.neon`
+
+### PHPCS
+
+Code style is enforced using the [WordPress Coding Standards](https://github.com/WordPress/WordPress-Coding-Standards) ruleset with PHP compatibility checks.
+
+Configuration: `phpcs.xml`
+
+### TypeScript
+
+Scripts use TypeScript with strict mode. The entry point is `resources/scripts/scripts.ts`. Vite handles transpilation — no extra build step needed.
+
+Configuration: `tsconfig.json`
+
 ## Project Structure
 
 ```
@@ -71,18 +105,24 @@ theme-root/
 ├── header.php                 # Template wrapper
 ├── footer.php                 # Template wrapper
 ├── index.php                  # Template wrapper
+├── style.css                  # Theme metadata
+├── composer.json              # PHP dependencies (PHPStan, PHPCS)
+├── tsconfig.json              # TypeScript configuration
+├── phpstan.neon               # PHPStan configuration
+├── phpcs.xml                  # PHPCS configuration
+├── vite.config.mjs            # Vite configuration
 ├── inc/
-│   ├── assets.php            # Unified asset loading (dev + production)
-│   └── cleanup.php           # WordPress cleanup hooks
+│   ├── assets.php             # Vite asset loading (dev + production)
+│   └── cleanup.php            # WordPress cleanup hooks
 ├── template-parts/
-│   ├── header.php            # Actual header template
-│   ├── footer.php            # Actual footer template
-│   └── index.php             # Actual index template
+│   ├── header.php             # Actual header template
+│   ├── footer.php             # Actual footer template
+│   └── index.php              # Actual index template
 └── resources/
-    ├── scripts/              # JavaScript source files
-    ├── styles/               # CSS source files
-    ├── images/               # Image assets
-    └── fonts/                # Font files (optional)
+    ├── scripts/               # TypeScript source files
+    ├── styles/                # CSS source files
+    ├── images/                # Image assets
+    └── fonts/                 # Font files (optional)
 ```
 
 ## Adding Fonts
@@ -119,5 +159,4 @@ Vite will automatically process and optimize them during build.
 
 ## License
 
-Feel free to use this theme however you like. Attribution appreciated but not required.
-
+GPL-2.0-or-later
