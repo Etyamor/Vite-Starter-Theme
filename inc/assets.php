@@ -1,57 +1,73 @@
 <?php
 /**
- * Asset Loading - Unified Dev and Production
+ * Vite Asset Loading
+ *
+ * Automatically switches between Vite dev server (HMR) and production manifest.
+ * Dev mode is active when dist/.vite/manifest.json does not exist.
  */
 
-// Define production constants (needed to check environment)
-define('VITE_THEME_ASSETS_DIR', get_template_directory_uri() . '/dist');
-define('VITE_THEME_MANIFEST_PATH', get_template_directory() . '/dist/.vite/manifest.json');
+define('VITE_DIST_URI', get_template_directory_uri() . '/dist');
+define('VITE_MANIFEST_PATH', get_template_directory() . '/dist/.vite/manifest.json');
+define('VITE_DEV_SERVER', 'http://localhost:5173');
 
-// Environment detection
-$vite_is_production = file_exists(VITE_THEME_MANIFEST_PATH);
-
-// Define mode-specific constants
-if (!$vite_is_production) {
-    // Development constants
-    define('VITE_THEME_DEV_SERVER', 'http://localhost:5173');
-    define('VITE_THEME_DEV_DIR', 'wp-content/themes/' . basename(get_template_directory()));
-    define('VITE_THEME_DEV_ASSETS_DIR', VITE_THEME_DEV_DIR . '/resources');
-    define('VITE_THEME_DEV_CLIENT_PATH', VITE_THEME_DEV_SERVER . '/' . VITE_THEME_DEV_DIR . '/@vite/client');
-    define('VITE_THEME_DEV_SCRIPTS_PATH', VITE_THEME_DEV_SERVER . '/' . VITE_THEME_DEV_ASSETS_DIR . '/scripts/scripts.ts');
-    define('VITE_THEME_DEV_STYLES_PATH', VITE_THEME_DEV_SERVER . '/' . VITE_THEME_DEV_ASSETS_DIR . '/styles/styles.css');
+function vite_is_dev(): bool {
+    return ! file_exists(VITE_MANIFEST_PATH);
 }
 
-// Unified asset enqueuing
-add_action('wp_enqueue_scripts', function() use ($vite_is_production) {
-    $theme_version = wp_get_theme()->get('Version');
+function vite_dev_url(string $path): string {
+    $theme_dir = 'wp-content/themes/' . basename(get_template_directory());
+    return VITE_DEV_SERVER . '/' . $theme_dir . '/' . ltrim($path, '/');
+}
 
-    if ($vite_is_production) {
-        // Production: Load from manifest
-        $manifest = json_decode(file_get_contents(VITE_THEME_MANIFEST_PATH), true);
-        if (is_array($manifest)) {
-            foreach ($manifest as $key => $value) {
-                $file   = $value['file'];
-                $ext    = pathinfo($file, PATHINFO_EXTENSION);
-                $handle = 'vite-' . sanitize_title($key);
-                if ($ext === 'css') {
-                    wp_enqueue_style($handle, VITE_THEME_ASSETS_DIR . '/' . $file, [], $theme_version);
-                } elseif ($ext === 'js') {
-                    wp_enqueue_script($handle, VITE_THEME_ASSETS_DIR . '/' . $file, [], $theme_version, true);
-                }
-            }
+function vite_get_manifest(): ?array {
+    static $manifest = null;
+
+    if ($manifest === null) {
+        $content  = file_get_contents(VITE_MANIFEST_PATH);
+        $manifest = $content ? json_decode($content, true) : false;
+    }
+
+    return is_array($manifest) ? $manifest : null;
+}
+
+function vite_enqueue_dev_assets(): void {
+    wp_enqueue_script('vite-client', vite_dev_url('@vite/client'), [], null, true);
+    wp_enqueue_script('theme-scripts', vite_dev_url('resources/scripts/scripts.ts'), [], null, true);
+    wp_enqueue_style('theme-styles', vite_dev_url('resources/styles/styles.css'), [], null);
+}
+
+function vite_enqueue_production_assets(): void {
+    $manifest = vite_get_manifest();
+    if (! $manifest) {
+        return;
+    }
+
+    $version = wp_get_theme()->get('Version');
+
+    foreach ($manifest as $key => $entry) {
+        $file   = $entry['file'];
+        $handle = 'vite-' . sanitize_title($key);
+        $ext    = pathinfo($file, PATHINFO_EXTENSION);
+
+        if ($ext === 'css') {
+            wp_enqueue_style($handle, VITE_DIST_URI . '/' . $file, [], $version);
+        } elseif ($ext === 'js') {
+            wp_enqueue_script($handle, VITE_DIST_URI . '/' . $file, [], $version, true);
         }
+    }
+}
+
+add_action('wp_enqueue_scripts', function () {
+    if (vite_is_dev()) {
+        vite_enqueue_dev_assets();
     } else {
-        // Development: Load from Vite dev server
-        wp_enqueue_script('vite-client', VITE_THEME_DEV_CLIENT_PATH, [], null, true);
-
-        add_filter('script_loader_tag', function ($tag, $handle) {
-            if ($handle === 'vite-client') {
-                return str_replace('<script ', '<script type="module" ', $tag);
-            }
-            return $tag;
-        }, 10, 2);
-
-        wp_enqueue_script('theme-scripts', VITE_THEME_DEV_SCRIPTS_PATH, [], null, true);
-        wp_enqueue_style('theme-styles', VITE_THEME_DEV_STYLES_PATH, [], null);
+        vite_enqueue_production_assets();
     }
 });
+
+add_filter('script_loader_tag', function (string $tag, string $handle): string {
+    if ($handle === 'vite-client' || $handle === 'theme-scripts') {
+        return str_replace('<script ', '<script type="module" ', $tag);
+    }
+    return $tag;
+}, 10, 2);

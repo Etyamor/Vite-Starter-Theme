@@ -13,31 +13,22 @@ This is a WordPress theme that uses Vite for asset bundling and Tailwind CSS v4 
 
 ## Asset Loading Architecture
 
-The theme has unified dual-mode asset loading in `inc/assets.php` that automatically switches between development and production:
+The theme has dual-mode asset loading in `inc/assets.php` that automatically switches between development and production.
 
-### Production Mode
-- Assets are loaded from `dist/.vite/manifest.json`
-- Manifest parsed to enqueue hashed CSS/JS files via WordPress hooks
-- Constants defined:
-  - `VITE_THEME_ASSETS_DIR` - Points to `/dist` directory
-  - `VITE_THEME_MANIFEST_PATH` - Path to manifest file
+Constants:
+- `VITE_DIST_URI` - Theme dist directory URI
+- `VITE_MANIFEST_PATH` - Absolute path to manifest file
+- `VITE_DEV_SERVER` - Dev server URL
 
-### Development Mode
-- When manifest doesn't exist, loads from Vite dev server at `http://localhost:5173`
-- Enqueues Vite client for HMR functionality as a module script
-- Development-specific constants are conditionally defined:
-  - `VITE_THEME_DEV_SERVER` - Dev server URL
-  - `VITE_THEME_DEV_CLIENT_PATH` - Vite client path
-  - `VITE_THEME_DEV_SCRIPTS_PATH` - Scripts entry point
-  - `VITE_THEME_DEV_STYLES_PATH` - Styles entry point
+Key functions:
+- `vite_is_dev()` - Returns true when manifest doesn't exist (dev mode)
+- `vite_dev_url($path)` - Builds a full dev server URL for a given asset path
+- `vite_get_manifest()` - Reads and caches the production manifest
+- `vite_enqueue_dev_assets()` - Enqueues Vite client + source entry points
+- `vite_enqueue_production_assets()` - Enqueues hashed files from manifest
 
-### Key Implementation Detail
-The `inc/assets.php` file handles both modes in a unified way:
-- Checks if manifest exists to determine environment
-- Defines only the constants needed for the current mode
-- Enqueues appropriate assets based on detected environment
-- Run `npm run dev` to work with HMR (removes manifest automatically)
-- Run `npm run build` to switch to production mode
+Run `npm run dev` to work with HMR (removes manifest automatically).
+Run `npm run build` to switch to production mode.
 
 ## Vite Configuration
 
