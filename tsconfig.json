@@ -7,9 +7,8 @@
     "noEmit": true,
     "isolatedModules": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
     "paths": {
-      "@scripts/*": ["resources/scripts/*"]
+      "@scripts/*": ["./resources/scripts/*"]
     }
   },
   "include": ["resources/scripts/**/*.ts"]

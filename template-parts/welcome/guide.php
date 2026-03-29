@@ -31,7 +31,7 @@
         <div class="flex gap-3">
             <div class="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">5</div>
             <div>
-                <p class="text-gray-700"><span class="font-semibold">Clean up after itself</span> &mdash; optionally deletes <code class="text-sm text-gray-600">setup.js</code> and removes the <code class="text-sm text-gray-600">setup</code> script from <code class="text-sm text-gray-600">package.json</code>.</p>
+                <p class="text-gray-700"><span class="font-semibold">Clean up after itself</span> &mdash; optionally deletes <code class="text-sm text-gray-600">bin/setup.js</code> and removes the <code class="text-sm text-gray-600">setup</code> script from <code class="text-sm text-gray-600">package.json</code>.</p>
             </div>
         </div>
     </div>

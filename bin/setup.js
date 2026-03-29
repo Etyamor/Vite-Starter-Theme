@@ -102,7 +102,13 @@ async function main() {
   ];
   if (author) styleLines.push(`Author: ${author}`);
   if (authorUri) styleLines.push(`Author URI: ${authorUri}`);
-  styleLines.push('Version: 1.0.0', '*/', '');
+  styleLines.push(
+    'Version: 1.0.0',
+    'License: GNU General Public License v2 or later',
+    'License URI: https://www.gnu.org/licenses/gpl-2.0.html',
+    '*/',
+    ''
+  );
   fs.writeFileSync(styleCssPath, styleLines.join('\n'), 'utf8');
   console.log('  Updated style.css');
 
@@ -126,14 +132,19 @@ async function main() {
     ['Vite Starter Theme', themeName],
   ]);
 
-  // 6. inc/assets.php — handle prefixes
+  // 6. inc/assets.php — handle prefixes (enqueue calls and script_loader_tag filter)
   const handleSlug = slug;
   replaceInFile('inc/assets.php', [
     ["'theme-scripts'", `'${handleSlug}-scripts'`],
     ["'theme-styles'", `'${handleSlug}-styles'`],
   ]);
 
-  // 7. Font swap
+  // 7. composer.json
+  replaceInFile('composer.json', [
+    ['"starter/vite-starter-theme"', `"${slug}/${slug}"`],
+  ]);
+
+  // 8. Font swap
   if (font) {
     const fontSlug = font
       .toLowerCase()
@@ -169,16 +180,24 @@ async function main() {
     ]);
   }
 
-  // 8. Remove welcome page
+  // 9. Remove welcome page
   if (removeWelcome.toLowerCase() === 'y') {
     removeDir('template-parts/welcome');
 
     const indexPath = path.join(ROOT, 'template-parts/index.php');
     const indexContent = [
-      '<?php get_header(); ?>',
+      '<?php',
+      '/**',
+      ' * Index template.',
+      ' *',
+      ` * @package ${themeName.replace(/[^a-zA-Z0-9]+/g, '_')}`,
+      ' */',
+      '',
+      'get_header();',
+      '?>',
       '<main>',
-      '    <h1><?php bloginfo(\'name\'); ?></h1>',
-      '    <p><?php bloginfo(\'description\'); ?></p>',
+      '\t<h1><?php bloginfo( \'name\' ); ?></h1>',
+      '\t<p><?php bloginfo( \'description\' ); ?></p>',
       '</main>',
       '<?php get_footer(); ?>',
       '',
@@ -202,8 +221,8 @@ async function main() {
     }
 
     // Delete this file
-    fs.unlinkSync(path.join(ROOT, 'setup.js'));
-    console.log('  Deleted setup.js');
+    fs.unlinkSync(path.join(ROOT, 'bin', 'setup.js'));
+    console.log('  Deleted bin/setup.js');
   }
 
   console.log('\nAll done! Next steps:');

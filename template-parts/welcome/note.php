@@ -8,7 +8,7 @@
         </div>
         <div>
             <h3 class="mb-2 font-bold text-amber-900">Important Note</h3>
-            <p class="text-amber-800">Vite does not parse PHP files for assets. All images, fonts, and other assets must be imported through CSS or JavaScript entry points to be included in the bundle. For PHP-only assets, create a separate directory outside the Vite build process.</p>
+            <p class="text-amber-800">Vite only bundles assets that are imported in CSS or JavaScript. Place images in <code class="rounded bg-amber-200 px-1 text-sm">resources/images/</code> and reference them in CSS (e.g. <code class="rounded bg-amber-200 px-1 text-sm">url('../images/hero.webp')</code>) &mdash; unreferenced files will not appear in the production build. Assets referenced only in PHP won't be bundled.</p>
         </div>
     </div>
 </div>

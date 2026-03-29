@@ -10,6 +10,14 @@ This is a WordPress theme that uses Vite for asset bundling and Tailwind CSS v4 
 
 - `npm run dev` - Start Vite development server with HMR (clears manifest before starting)
 - `npm run build` - Build production assets with Vite
+- `npm run lint` - Run PHPCS and PHPStan together
+- `npm run lint:php` - Check PHP against WordPress coding standards
+- `npm run lint:php:fix` - Auto-fix PHPCS violations
+- `npm run lint:types` - Run PHPStan static analysis (level 5)
+- `npm run typecheck` - Run TypeScript type checking
+- `npm run bundle` - Lint + build + create production zip
+- `npm run bundle:quick` - Build + zip (skip linting)
+- `npm run bundle:clean` - Remove the bundled/ directory
 
 ## Asset Loading Architecture
 
@@ -53,17 +61,22 @@ Fonts and images are imported through CSS, not PHP. Vite parses CSS files to bun
 2. Import in `resources/styles/fonts.css`: `@import "@fontsource/<font-family>";`
 
 **Images:**
-- Reference images in CSS using relative paths: `url('../images/filename.webp')`
-- Vite will process and optimize them during build
+- Place images in `resources/images/` and reference in CSS: `url('../images/filename.webp')`
+- Only referenced images are included in the production build
+- Unreferenced files in `resources/images/` will NOT appear in `dist/`
 - Images are optimized via vite-plugin-image-optimizer
 
-**Important:** Vite does not parse PHP files for assets. Assets referenced only in PHP won't be bundled. If needed, create a separate folder for PHP-only assets or ensure they're imported somewhere in the CSS/JS entry points.
+**Important:** Vite only bundles assets that are imported in CSS or JS. Assets referenced only in PHP won't be bundled.
 
 ## Theme Structure
 
 ### Root Level
 - `functions.php` - Lightweight loader (requires inc/ modules)
 - `header.php`, `footer.php`, `index.php` - Template wrappers (delegate to template-parts/)
+
+### bin/ Directory (Scripts)
+- `bin/setup.js` - Interactive theme setup script
+- `bin/bundle.js` - Production zip bundler (lint + build + zip)
 
 ### inc/ Directory (Theme Logic)
 - `inc/assets.php` - Unified asset loading for dev and production modes
@@ -77,7 +90,7 @@ Fonts and images are imported through CSS, not PHP. Vite parses CSS files to bun
 ### resources/ Directory (Source Assets)
 - `resources/scripts/` - TypeScript source files
 - `resources/styles/` - CSS source files (Tailwind, fonts, custom styles)
-- `resources/images/` - Image assets for Vite processing
+- `resources/images/` - Image assets (must be referenced in CSS/JS to be bundled)
 - `resources/fonts/` - Font files (if not using fontsource packages)
 
 ### dist/ Directory (Build Output)

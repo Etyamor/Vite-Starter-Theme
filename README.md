@@ -42,7 +42,7 @@ Running `npm run setup` launches an interactive script that personalizes the sta
 2. **Apply replacements across the codebase** — updates the `style.css` header, `package.json` name, `README.md` title, welcome page heading, and asset handle prefixes in `inc/assets.php`.
 3. **Swap the default font** — optionally replaces Roboto with any [fontsource](https://fontsource.org) font. Uninstalls the old package, installs the new one, and updates both the import and `font-family` rule in `fonts.css`.
 4. **Remove the welcome page** — optionally deletes the demo welcome page and resets the index template to a blank starting point.
-5. **Clean up after itself** — optionally deletes `setup.js` and removes the `setup` script from `package.json`.
+5. **Clean up after itself** — optionally deletes `bin/setup.js` and removes the `setup` script from `package.json`.
 
 See an example of a theme created with the setup script: [vite-starter-theme-example](https://github.com/Etyamor/vite-starter-theme-example)
 
@@ -111,6 +111,9 @@ theme-root/
 ├── phpstan.neon               # PHPStan configuration
 ├── phpcs.xml                  # PHPCS configuration
 ├── vite.config.mjs            # Vite configuration
+├── bin/
+│   ├── setup.js               # Interactive setup script
+│   └── bundle.js              # Production zip bundler
 ├── inc/
 │   ├── assets.php             # Vite asset loading (dev + production)
 │   └── cleanup.php            # WordPress cleanup hooks
@@ -121,7 +124,7 @@ theme-root/
 └── resources/
     ├── scripts/               # TypeScript source files
     ├── styles/                # CSS source files
-    ├── images/                # Image assets
+    ├── images/                # Image assets (must be referenced in CSS/JS to be bundled)
     └── fonts/                 # Font files (optional)
 ```
 
@@ -141,7 +144,7 @@ Import in `resources/styles/fonts.css`:
 
 ## Adding Images
 
-Reference images in CSS using relative paths:
+Place images in `resources/images/` and reference them in CSS using relative paths:
 
 ```css
 .hero {
@@ -149,11 +152,23 @@ Reference images in CSS using relative paths:
 }
 ```
 
-Vite will automatically process and optimize them during build.
+Vite will process and optimize them during build. Only referenced images are included in the production bundle — unreferenced files in `resources/images/` will not appear in `dist/`.
+
+## Bundling for Distribution
+
+Create a production-ready `.zip` for WordPress installation:
+
+| Command | Description |
+|---|---|
+| `npm run bundle` | Lint + build + zip |
+| `npm run bundle:quick` | Build + zip (skip linting) |
+| `npm run bundle:clean` | Remove the `bundled/` directory |
+
+The zip contains a `<theme-name>/` root folder with only the files WordPress needs — no `node_modules`, `vendor`, `resources`, `bin`, or config files.
 
 ## Important Notes
 
-- **Vite does not parse PHP files** for assets. Assets must be imported in CSS/JS entry points to be bundled.
+- **Vite only bundles referenced assets** — images and fonts must be imported in CSS or JS entry points. Unreferenced files won't appear in the production build.
 - The theme automatically detects dev vs production mode based on manifest file existence.
 - All templates are in `template-parts/` for better organization.
 
