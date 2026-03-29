@@ -6,5 +6,8 @@
 .idea
 .vscode
 
+# AI
+.claude/settings.local.json
+
 # OS
 .DS_Store
