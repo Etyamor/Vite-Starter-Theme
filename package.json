@@ -5,7 +5,12 @@
   "scripts": {
     "build": "vite build",
     "dev": "rimraf ./dist/.vite/manifest.json && vite",
-    "setup": "node setup.js"
+    "setup": "node setup.js",
+    "lint:php": "vendor/bin/phpcs",
+    "lint:php:fix": "vendor/bin/phpcbf",
+    "lint:types": "vendor/bin/phpstan analyse --memory-limit=512M",
+    "lint": "npm run lint:php && npm run lint:types",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@fontsource/roboto": "^5.2.8",

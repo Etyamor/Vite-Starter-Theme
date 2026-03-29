@@ -1,5 +1,6 @@
 # Project
 /node_modules
+/vendor
 /dist
 
 # IDE

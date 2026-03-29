@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<ruleset name="Vite Starter Theme">
+    <description>PHPCS rules for Vite Starter Theme</description>
+
+    <file>./functions.php</file>
+    <file>./inc</file>
+    <file>./template-parts</file>
+
+    <arg name="extensions" value="php"/>
+    <arg name="colors"/>
+    <arg value="sp"/>
+
+    <config name="minimum_supported_wp_version" value="6.5"/>
+    <config name="testVersion" value="8.1-"/>
+
+    <rule ref="WordPress">
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+    </rule>
+
+    <rule ref="PHPCompatibilityWP"/>
+</ruleset>
