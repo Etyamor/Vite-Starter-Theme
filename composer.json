@@ -13,9 +13,13 @@
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "platform": {
+            "php": "8.2.0"
         }
     },
     "require": {
+        "php": ">=8.2",
         "jenssegers/blade": "^2.0"
     },
     "autoload": {
