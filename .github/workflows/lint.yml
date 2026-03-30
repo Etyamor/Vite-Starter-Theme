@@ -37,7 +37,7 @@ jobs:
           node-version: 24
           cache: npm
 
-      - run: npm ci
+      - run: npm install
 
       - name: Run TypeScript type check
         run: npx tsc --noEmit
@@ -53,7 +53,7 @@ jobs:
           node-version: 24
           cache: npm
 
-      - run: npm ci
+      - run: npm install
 
       - name: Run Stylelint
         run: npx stylelint "resources/styles/**/*.css"
