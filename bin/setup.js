@@ -158,7 +158,6 @@ async function main() {
     'inc/Directives/HtmlDirectives.php',
     'functions.php',
     'index.php',
-    '_ide_helper_blade.php',
   ];
   for (const file of namespaceFiles) {
     replaceInFile(file, [
@@ -228,7 +227,14 @@ async function main() {
     console.log('  Reset resources/views/index.blade.php');
   }
 
-  // 11. Regenerate autoloader for new namespace
+  // 11. Remove CLAUDE.md
+  const claudeMdPath = path.join(ROOT, 'CLAUDE.md');
+  if (fs.existsSync(claudeMdPath)) {
+    fs.unlinkSync(claudeMdPath);
+    console.log('  Deleted CLAUDE.md');
+  }
+
+  // 12. Regenerate autoloader for new namespace
   console.log('\n  Regenerating Composer autoloader...');
   try {
     execSync('composer dump-autoload', { cwd: ROOT, stdio: 'inherit' });
