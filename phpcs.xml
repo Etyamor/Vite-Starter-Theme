@@ -12,7 +12,7 @@
     <arg name="colors"/>
     <arg value="sp"/>
 
-    <config name="testVersion" value="8.1-"/>
+    <config name="testVersion" value="8.2-"/>
     <config name="ignore_warnings_on_exit" value="1"/>
 
     <rule ref="PSR12"/>
