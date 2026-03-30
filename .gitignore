@@ -8,6 +8,7 @@
 # IDE
 .idea
 .vscode
+_ide_helper*.php
 
 # AI
 .claude/settings.local.json
