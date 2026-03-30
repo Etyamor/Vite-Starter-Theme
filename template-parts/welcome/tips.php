@@ -1,5 +1,5 @@
 <!-- Quick Tips Section -->
-<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+<div class="mb-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
     <div class="rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white shadow-lg">
         <h3 class="mb-4 text-2xl font-bold">Adding Fonts</h3>
         <div class="space-y-3">

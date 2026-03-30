@@ -1,5 +1,5 @@
 <!-- Important Note -->
-<div class="mt-6 rounded-2xl border-2 border-amber-300 bg-amber-50 p-6">
+<div class="rounded-2xl border-2 border-amber-300 bg-amber-50 p-6">
     <div class="flex gap-3">
         <div class="flex-shrink-0">
             <svg class="h-6 w-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
