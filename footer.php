@@ -1,5 +1,9 @@
 <?php
+
 /**
- * Footer Template - Loads actual template from template-parts/
+ * Footer template — layout handled by Blade.
+ *
+ * This file exists for WordPress compatibility.
+ *
+ * @package Vite_Starter_Theme
  */
-get_template_part('template-parts/footer');

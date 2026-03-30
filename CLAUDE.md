@@ -4,7 +4,7 @@ This file provides guidance for AI coding assistants when working with code in t
 
 ## Project Overview
 
-This is a WordPress theme that uses Vite for asset bundling and Tailwind CSS v4 for styling. The theme is designed for minimal complexity with optimized asset handling.
+This is a WordPress theme that uses Vite for asset bundling, Tailwind CSS v4 for styling, and Blade for templating. The theme is designed for minimal complexity with optimized asset handling.
 
 ## Development Commands
 
@@ -20,6 +20,30 @@ This is a WordPress theme that uses Vite for asset bundling and Tailwind CSS v4 
 - `npm run bundle` - Lint + build + create production zip
 - `npm run bundle:quick` - Build + zip (skip linting)
 - `npm run bundle:clean` - Remove the bundled/ directory
+
+## Blade Templating
+
+The theme uses [jenssegers/blade](https://github.com/jenssegers/blade) (standalone Laravel Blade) for templating.
+
+### How It Works
+- `ViteStarterTheme\Blade` singleton in `inc/Blade.php` initializes the engine
+- Views live in `resources/views/` with `.blade.php` extension
+- Compiled cache goes to `storage/views/` (gitignored)
+- Root PHP files (`index.php`) delegate to Blade via `Blade::view('index')`
+- `header.php`/`footer.php` are empty stubs — the layout handles the HTML document
+
+### Custom Directives
+- `@wphead` — calls `wp_head()`
+- `@wpfooter` — calls `wp_footer()`
+- `@wpbodyopen` — calls `wp_body_open()`
+
+### Helper Functions (`inc/helpers.php`)
+- `get_language_attributes()` — returns `language_attributes()` as string
+- `get_body_class_attribute()` — returns `class="..."` attribute string
+
+### Adding New Templates
+1. Create `resources/views/<name>.blade.php` using `@extends('layouts.app')`
+2. Create a root PHP file (`<name>.php`) with `ViteStarterTheme\Blade::view('<name>')`
 
 ## Asset Loading Architecture
 
@@ -73,21 +97,24 @@ Fonts and images are imported through CSS, not PHP. Vite parses CSS files to bun
 ## Theme Structure
 
 ### Root Level
-- `functions.php` - Lightweight loader (requires inc/ modules)
-- `header.php`, `footer.php`, `index.php` - Template wrappers (delegate to template-parts/)
+- `functions.php` - Loads autoloader and inc/ modules
+- `index.php` - Delegates to Blade view
+- `header.php`, `footer.php` - Empty stubs (layout handled by Blade)
 
 ### bin/ Directory (Scripts)
 - `bin/setup.js` - Interactive theme setup script
 - `bin/bundle.js` - Production zip bundler (lint + build + zip)
 
 ### inc/ Directory (Theme Logic)
+- `inc/Blade.php` - Blade service singleton with WordPress directives
+- `inc/helpers.php` - WordPress helper functions for Blade templates
 - `inc/assets.php` - Unified asset loading for dev and production modes
 - `inc/cleanup.php` - WordPress cleanup (removes unnecessary scripts/styles)
 
-### template-parts/ Directory (Actual Templates)
-- `template-parts/header.php` - Actual header template
-- `template-parts/footer.php` - Actual footer template
-- `template-parts/index.php` - Actual index template
+### resources/views/ Directory (Blade Templates)
+- `resources/views/layouts/app.blade.php` - Base HTML layout
+- `resources/views/index.blade.php` - Welcome page view
+- `resources/views/partials/welcome/` - Welcome page section partials
 
 ### resources/ Directory (Source Assets)
 - `resources/scripts/` - TypeScript source files
@@ -97,3 +124,6 @@ Fonts and images are imported through CSS, not PHP. Vite parses CSS files to bun
 
 ### dist/ Directory (Build Output)
 - `dist/` - Build output directory (gitignored, created by Vite)
+
+### storage/ Directory (Cache)
+- `storage/views/` - Blade compiled template cache (gitignored)

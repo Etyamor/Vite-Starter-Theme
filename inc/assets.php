@@ -1,119 +1,92 @@
 <?php
 
-/**
- * Vite Asset Loading.
- *
- * Automatically switches between Vite dev server (HMR) and production manifest.
- * Dev mode is active when dist/.vite/manifest.json does not exist.
- *
- * @package Vite_Starter_Theme
- */
+declare(strict_types=1);
 
-define('VITE_DIST_URI', get_template_directory_uri() . '/dist');
-define('VITE_MANIFEST_PATH', get_template_directory() . '/dist/.vite/manifest.json');
-define('VITE_DEV_SERVER', 'http://localhost:5173');
+namespace ViteStarterTheme;
 
-/**
- * Check if the theme is running in development mode.
- *
- * @return bool True if the Vite dev server should be used.
- */
-function vite_is_dev(): bool
+class Assets
 {
-    return ! file_exists(VITE_MANIFEST_PATH);
-}
+    private const DIST_DIR = '/dist';
+    private const MANIFEST_FILE = '/dist/.vite/manifest.json';
+    private const DEV_SERVER = 'http://localhost:5173';
 
-/**
- * Build a full URL to an asset on the Vite dev server.
- *
- * @param string $path Relative path to the asset.
- * @return string Full dev server URL.
- */
-function vite_dev_url(string $path): string
-{
-    $theme_dir = 'wp-content/themes/' . basename(get_template_directory());
-    return VITE_DEV_SERVER . '/' . $theme_dir . '/' . ltrim($path, '/');
-}
+    private static ?array $manifest = null;
 
-/**
- * Read and cache the Vite production manifest.
- *
- * @return array|null Parsed manifest or null on failure.
- */
-function vite_get_manifest(): ?array
-{
-    static $manifest = null;
-
-    if (null === $manifest) {
-        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file read.
-        $content  = file_get_contents(VITE_MANIFEST_PATH);
-        $manifest = $content ? json_decode($content, true) : false;
+    public static function register(): void
+    {
+        add_action('wp_enqueue_scripts', [self::class, 'enqueue']);
+        add_filter('script_loader_tag', [self::class, 'moduleScriptTag'], 10, 2);
     }
 
-    return is_array($manifest) ? $manifest : null;
-}
-
-/**
- * Enqueue assets from the Vite dev server.
- *
- * @return void
- */
-function vite_enqueue_dev_assets(): void
-{
-    // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Dev server assets are not versioned.
-    wp_enqueue_script('vite-client', vite_dev_url('@vite/client'), array(), null, true);
-    // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Dev server assets are not versioned.
-    wp_enqueue_script('theme-scripts', vite_dev_url('resources/scripts/scripts.ts'), array(), null, true);
-    // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Dev server assets are not versioned.
-    wp_enqueue_style('theme-styles', vite_dev_url('resources/styles/styles.css'), array(), null);
-}
-
-/**
- * Enqueue hashed assets from the production manifest.
- *
- * @return void
- */
-function vite_enqueue_production_assets(): void
-{
-    $manifest = vite_get_manifest();
-    if (! $manifest) {
-        return;
-    }
-
-    $version = wp_get_theme()->get('Version');
-
-    foreach ($manifest as $key => $entry) {
-        $file   = $entry['file'];
-        $handle = 'vite-' . sanitize_title($key);
-        $ext    = pathinfo($file, PATHINFO_EXTENSION);
-
-        if ('css' === $ext) {
-            wp_enqueue_style($handle, VITE_DIST_URI . '/' . $file, array(), $version);
-        } elseif ('js' === $ext) {
-            wp_enqueue_script($handle, VITE_DIST_URI . '/' . $file, array(), $version, true);
-        }
-    }
-}
-
-add_action(
-    'wp_enqueue_scripts',
-    function () {
-        if (vite_is_dev()) {
-            vite_enqueue_dev_assets();
+    public static function enqueue(): void
+    {
+        if (self::isDev()) {
+            self::enqueueDev();
         } else {
-            vite_enqueue_production_assets();
+            self::enqueueProduction();
         }
     }
-);
 
-add_filter(
-    'script_loader_tag',
-    function (string $tag, string $handle): string {
-        if ('vite-client' === $handle || 'theme-scripts' === $handle) {
+    public static function moduleScriptTag(string $tag, string $handle): string
+    {
+        if ($handle === 'vite-client' || $handle === 'theme-scripts') {
             return str_replace('<script ', '<script type="module" ', $tag);
         }
         return $tag;
-    },
-    10,
-    2
-);
+    }
+
+    public static function isDev(): bool
+    {
+        return !file_exists(get_template_directory() . self::MANIFEST_FILE);
+    }
+
+    public static function distUri(): string
+    {
+        return get_template_directory_uri() . self::DIST_DIR;
+    }
+
+    private static function devUrl(string $path): string
+    {
+        $themeDir = 'wp-content/themes/' . basename(get_template_directory());
+        return self::DEV_SERVER . '/' . $themeDir . '/' . ltrim($path, '/');
+    }
+
+    private static function getManifest(): ?array
+    {
+        if (self::$manifest === null) {
+            $content = file_get_contents(get_template_directory() . self::MANIFEST_FILE);
+            self::$manifest = $content ? json_decode($content, true) : false;
+        }
+
+        return is_array(self::$manifest) ? self::$manifest : null;
+    }
+
+    private static function enqueueDev(): void
+    {
+        wp_enqueue_script('vite-client', self::devUrl('@vite/client'), [], null, true);
+        wp_enqueue_script('theme-scripts', self::devUrl('resources/scripts/scripts.ts'), [], null, true);
+        wp_enqueue_style('theme-styles', self::devUrl('resources/styles/styles.css'), [], null);
+    }
+
+    private static function enqueueProduction(): void
+    {
+        $manifest = self::getManifest();
+        if (!$manifest) {
+            return;
+        }
+
+        $version = wp_get_theme()->get('Version');
+
+        foreach ($manifest as $key => $entry) {
+            $file = $entry['file'];
+            $handle = 'vite-' . sanitize_title($key);
+            $ext = pathinfo($file, PATHINFO_EXTENSION);
+
+            if ($ext === 'css') {
+                wp_enqueue_style($handle, self::distUri() . '/' . $file, [], $version);
+            } elseif ($ext === 'js') {
+                wp_enqueue_script($handle, self::distUri() . '/' . $file, [], $version, true);
+            }
+        }
+    }
+}

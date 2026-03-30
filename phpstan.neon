@@ -6,4 +6,3 @@ parameters:
     paths:
         - functions.php
         - inc/
-        - template-parts/

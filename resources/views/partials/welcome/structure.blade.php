@@ -7,15 +7,14 @@
             <h3 class="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500">Theme Root</h3>
             <div class="rounded-xl bg-gray-50 p-4">
                 <ul class="space-y-1 font-mono text-sm text-gray-700">
-                    <li><span class="text-gray-400">&#9500;&#9472;</span> <span class="text-blue-600">functions.php</span> <span class="text-xs text-gray-400">&mdash; Lightweight loader</span></li>
-                    <li><span class="text-gray-400">&#9500;&#9472;</span> <span class="text-blue-600">header.php</span> <span class="text-xs text-gray-400">&mdash; Template wrapper</span></li>
-                    <li><span class="text-gray-400">&#9500;&#9472;</span> <span class="text-blue-600">footer.php</span> <span class="text-xs text-gray-400">&mdash; Template wrapper</span></li>
-                    <li><span class="text-gray-400">&#9500;&#9472;</span> <span class="text-blue-600">index.php</span> <span class="text-xs text-gray-400">&mdash; Template wrapper</span></li>
+                    <li><span class="text-gray-400">&#9500;&#9472;</span> <span class="text-blue-600">functions.php</span> <span class="text-xs text-gray-400">&mdash; Autoloader + bootstrap</span></li>
+                    <li><span class="text-gray-400">&#9500;&#9472;</span> <span class="text-blue-600">index.php</span> <span class="text-xs text-gray-400">&mdash; Delegates to Blade</span></li>
+                    <li><span class="text-gray-400">&#9500;&#9472;</span> <span class="text-blue-600">header.php</span> <span class="text-xs text-gray-400">&mdash; WP stub (Blade layout)</span></li>
+                    <li><span class="text-gray-400">&#9500;&#9472;</span> <span class="text-blue-600">footer.php</span> <span class="text-xs text-gray-400">&mdash; WP stub (Blade layout)</span></li>
                     <li><span class="text-gray-400">&#9500;&#9472;</span> <span class="text-purple-600">style.css</span> <span class="text-xs text-gray-400">&mdash; Theme metadata</span></li>
                     <li><span class="text-gray-400">&#9500;&#9472;</span> <span class="text-purple-600">vite.config.mjs</span> <span class="text-xs text-gray-400">&mdash; Vite configuration</span></li>
-                    <li><span class="text-gray-400">&#9500;&#9472;</span> <span class="text-purple-600">tsconfig.json</span> <span class="text-xs text-gray-400">&mdash; TypeScript configuration</span></li>
-                    <li><span class="text-gray-400">&#9500;&#9472;</span> <span class="text-purple-600">phpstan.neon</span> <span class="text-xs text-gray-400">&mdash; PHPStan configuration</span></li>
-                    <li><span class="text-gray-400">&#9492;&#9472;</span> <span class="text-purple-600">phpcs.xml</span> <span class="text-xs text-gray-400">&mdash; PHPCS configuration</span></li>
+                    <li><span class="text-gray-400">&#9500;&#9472;</span> <span class="text-purple-600">composer.json</span> <span class="text-xs text-gray-400">&mdash; PHP deps + PSR-4 autoload</span></li>
+                    <li><span class="text-gray-400">&#9492;&#9472;</span> <span class="text-purple-600">tsconfig.json</span> <span class="text-xs text-gray-400">&mdash; TypeScript configuration</span></li>
                 </ul>
             </div>
         </div>
@@ -27,14 +26,20 @@
                     <div class="rounded-xl bg-blue-50 p-4">
                         <p class="mb-1 font-mono text-sm font-semibold text-blue-700">inc/</p>
                         <ul class="space-y-0.5 text-sm text-blue-800">
-                            <li><span class="font-mono text-blue-600">assets.php</span> &mdash; Vite asset loading (dev + production)</li>
-                            <li><span class="font-mono text-blue-600">cleanup.php</span> &mdash; WordPress cleanup hooks</li>
+                            <li><span class="font-mono text-blue-600">Blade.php</span> &mdash; Blade service singleton</li>
+                            <li><span class="font-mono text-blue-600">Assets.php</span> &mdash; Vite asset loading</li>
+                            <li><span class="font-mono text-blue-600">Cleanup.php</span> &mdash; WordPress cleanup hooks</li>
+                            <li><span class="font-mono text-blue-600">Directives/</span> &mdash; Custom Blade directives</li>
                         </ul>
                     </div>
 
                     <div class="rounded-xl bg-purple-50 p-4">
-                        <p class="mb-1 font-mono text-sm font-semibold text-purple-700">template-parts/</p>
-                        <p class="text-sm text-purple-800">Actual header, footer, and page templates live here &mdash; root-level PHP files are thin wrappers.</p>
+                        <p class="mb-1 font-mono text-sm font-semibold text-purple-700">resources/views/</p>
+                        <ul class="space-y-0.5 text-sm text-purple-800">
+                            <li><span class="font-mono text-purple-600">layouts/</span> &mdash; Base HTML layout</li>
+                            <li><span class="font-mono text-purple-600">partials/</span> &mdash; Reusable template sections</li>
+                            <li><span class="font-mono text-purple-600">index.blade.php</span> &mdash; Welcome page view</li>
+                        </ul>
                     </div>
 
                     <div class="rounded-xl bg-green-50 p-4">
@@ -43,7 +48,6 @@
                             <li><span class="font-mono text-green-600">scripts/</span> &mdash; TypeScript source files</li>
                             <li><span class="font-mono text-green-600">styles/</span> &mdash; CSS source files</li>
                             <li><span class="font-mono text-green-600">images/</span> &mdash; Image assets</li>
-                            <li><span class="font-mono text-green-600">fonts/</span> &mdash; Font files (optional)</li>
                         </ul>
                     </div>
 

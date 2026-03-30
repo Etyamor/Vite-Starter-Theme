@@ -14,5 +14,13 @@
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
+    },
+    "require": {
+        "jenssegers/blade": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ViteStarterTheme\\": "inc/"
+        }
     }
 }

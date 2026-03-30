@@ -43,11 +43,11 @@
     <div class="rounded-2xl bg-white p-6 shadow-lg transition-all hover:shadow-xl">
         <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white">
             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
             </svg>
         </div>
-        <h3 class="mb-2 text-xl font-bold text-gray-800">Modular Architecture</h3>
-        <p class="text-gray-600">Clean file structure with separation of concerns for easy maintenance.</p>
+        <h3 class="mb-2 text-xl font-bold text-gray-800">Blade Templates</h3>
+        <p class="text-gray-600">Laravel's Blade engine with layouts, sections, includes, and custom WordPress directives.</p>
     </div>
 
     <div class="rounded-2xl bg-white p-6 shadow-lg transition-all hover:shadow-xl">

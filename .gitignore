@@ -3,6 +3,7 @@
 /vendor
 /dist
 /bundled
+/storage
 
 # IDE
 .idea

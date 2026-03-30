@@ -1,5 +1,9 @@
 <?php
+
 /**
- * Header Template - Loads actual template from template-parts/
+ * Header template — layout handled by Blade.
+ *
+ * This file exists for WordPress compatibility.
+ *
+ * @package Vite_Starter_Theme
  */
-get_template_part('template-parts/header');

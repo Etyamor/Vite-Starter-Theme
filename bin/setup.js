@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const ROOT = __dirname;
+const ROOT = path.resolve(__dirname, '..');
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -24,6 +24,13 @@ function toSlug(name) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
+}
+
+function toPascalCase(slug) {
+  return slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join('');
 }
 
 function toFontFamily(fontSlug) {
@@ -62,6 +69,7 @@ async function main() {
   // Collect inputs
   const themeName = await ask('Theme name', 'Vite Starter Theme');
   const slug = toSlug(themeName);
+  const namespace = toPascalCase(slug);
 
   const description = await ask(
     'Description',
@@ -76,6 +84,7 @@ async function main() {
   console.log('\n--- Summary ---');
   console.log(`  Theme name:      ${themeName}`);
   console.log(`  Slug:            ${slug}`);
+  console.log(`  Namespace:       ${namespace}`);
   console.log(`  Description:     ${description}`);
   console.log(`  Author:          ${author || '(none)'}`);
   console.log(`  Author URL:      ${authorUri || '(none)'}`);
@@ -127,24 +136,42 @@ async function main() {
     ['# Vite Starter Theme', `# ${themeName}`],
   ]);
 
-  // 5. template-parts/welcome/header.php
-  replaceInFile('template-parts/welcome/header.php', [
+  // 5. Welcome page heading
+  replaceInFile('resources/views/partials/welcome/header.blade.php', [
     ['Vite Starter Theme', themeName],
   ]);
 
-  // 6. inc/assets.php — handle prefixes (enqueue calls and script_loader_tag filter)
-  const handleSlug = slug;
-  replaceInFile('inc/assets.php', [
-    ["'theme-scripts'", `'${handleSlug}-scripts'`],
-    ["'theme-styles'", `'${handleSlug}-styles'`],
-  ]);
-
-  // 7. composer.json
+  // 6. composer.json — package name and namespace
   replaceInFile('composer.json', [
     ['"starter/vite-starter-theme"', `"${slug}/${slug}"`],
+    ['"ViteStarterTheme\\\\": "inc/"', `"${namespace}\\\\": "inc/"`],
   ]);
 
-  // 8. Font swap
+  // 7. Rename PHP namespace across all inc/ classes and entry points
+  const namespaceFiles = [
+    'inc/Assets.php',
+    'inc/Blade.php',
+    'inc/Cleanup.php',
+    'inc/Helpers.php',
+    'inc/Directives/Directive.php',
+    'inc/Directives/WordPressDirectives.php',
+    'inc/Directives/HtmlDirectives.php',
+    'functions.php',
+    'index.php',
+  ];
+  for (const file of namespaceFiles) {
+    replaceInFile(file, [
+      ['ViteStarterTheme', namespace],
+    ]);
+  }
+
+  // 8. Asset handle prefixes
+  replaceInFile('inc/Assets.php', [
+    ["'theme-scripts'", `'${slug}-scripts'`],
+    ["'theme-styles'", `'${slug}-styles'`],
+  ]);
+
+  // 9. Font swap
   if (font) {
     const fontSlug = font
       .toLowerCase()
@@ -176,34 +203,36 @@ async function main() {
 
     replaceInFile('resources/styles/fonts.css', [
       ['@fontsource/roboto', `@fontsource/${fontSlug}`],
-      ["'Roboto', sans-serif", `'${fontFamily}', sans-serif`],
+      ['Roboto, sans-serif', `${fontFamily}, sans-serif`],
     ]);
   }
 
-  // 9. Remove welcome page
+  // 10. Remove welcome page
   if (removeWelcome.toLowerCase() === 'y') {
-    removeDir('template-parts/welcome');
+    removeDir('resources/views/partials/welcome');
 
-    const indexPath = path.join(ROOT, 'template-parts/index.php');
+    const indexPath = path.join(ROOT, 'resources/views/index.blade.php');
     const indexContent = [
-      '<?php',
-      '/**',
-      ' * Index template.',
-      ' *',
-      ` * @package ${themeName.replace(/[^a-zA-Z0-9]+/g, '_')}`,
-      ' */',
+      "@extends('layouts.app')",
       '',
-      'get_header();',
-      '?>',
+      "@section('content')",
       '<main>',
-      '\t<h1><?php bloginfo( \'name\' ); ?></h1>',
-      '\t<p><?php bloginfo( \'description\' ); ?></p>',
+      '    <h1>{{ get_bloginfo(\'name\') }}</h1>',
+      '    <p>{{ get_bloginfo(\'description\') }}</p>',
       '</main>',
-      '<?php get_footer(); ?>',
+      '@endsection',
       '',
     ].join('\n');
     fs.writeFileSync(indexPath, indexContent, 'utf8');
-    console.log('  Reset template-parts/index.php');
+    console.log('  Reset resources/views/index.blade.php');
+  }
+
+  // 11. Regenerate autoloader for new namespace
+  console.log('\n  Regenerating Composer autoloader...');
+  try {
+    execSync('composer dump-autoload', { cwd: ROOT, stdio: 'inherit' });
+  } catch {
+    console.log('  Warning: could not regenerate autoloader. Run "composer dump-autoload" manually.');
   }
 
   console.log('\nSetup complete!\n');

@@ -3,8 +3,10 @@
     <description>PHPCS rules for Vite Starter Theme</description>
 
     <file>./functions.php</file>
+    <file>./header.php</file>
+    <file>./footer.php</file>
+    <file>./index.php</file>
     <file>./inc</file>
-    <file>./template-parts</file>
 
     <arg name="extensions" value="php"/>
     <arg name="colors"/>

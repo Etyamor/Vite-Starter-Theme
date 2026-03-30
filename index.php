@@ -1,5 +1,9 @@
 <?php
+
 /**
- * Index Template - Loads actual template from template-parts/
+ * Index template — renders via Blade.
+ *
+ * @package Vite_Starter_Theme
  */
-get_template_part('template-parts/index');
+
+ViteStarterTheme\Blade::view('index');

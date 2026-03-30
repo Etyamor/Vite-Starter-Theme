@@ -13,7 +13,7 @@ const zipPath = path.join(distDir, zipName);
 const skipLint = process.argv.includes('--no-lint');
 
 // Directories to include recursively.
-const includeDirs = ['dist', 'inc', 'template-parts'];
+const includeDirs = ['dist', 'inc', 'resources/views', 'vendor'];
 
 // Individual files from the root to include.
 const includeFiles = [
@@ -79,7 +79,10 @@ if (!skipLint) {
 // 2. Build assets.
 run('npm run build', 'Vite production build');
 
-// 3. Stage files into a temp directory under the theme name.
+// 3. Install production-only Composer dependencies for bundling.
+run('composer install --no-dev --optimize-autoloader', 'Composer production install');
+
+// 4. Stage files into a temp directory under the theme name.
 const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'theme-bundle-'));
 const stageDir = path.join(tmpDir, themeName);
 fs.mkdirSync(stageDir);
@@ -97,7 +100,7 @@ for (const file of includeFiles) {
   }
 }
 
-// 4. Create zip.
+// 5. Create zip.
 if (fs.existsSync(zipPath)) {
   fs.unlinkSync(zipPath);
 }
@@ -107,6 +110,9 @@ execSync(`cd "${tmpDir}" && zip -r "${zipPath}" "${themeName}"`, {
 });
 
 fs.rmSync(tmpDir, { recursive: true, force: true });
+
+// 6. Restore dev dependencies.
+run('composer install', 'Restore dev dependencies');
 
 const stats = fs.statSync(zipPath);
 const sizeMB = (stats.size / 1024 / 1024).toFixed(2);

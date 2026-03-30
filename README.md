@@ -1,6 +1,6 @@
 # Vite Starter Theme
 
-A modern WordPress theme that leverages Vite for asset bundling, Tailwind CSS v4 for styling, and TypeScript for scripts. Includes PHPStan and PHPCS (PSR-12) for code quality out of the box.
+A modern WordPress theme that leverages Vite for asset bundling, Tailwind CSS v4 for styling, Blade for templating, and TypeScript for scripts. All PHP code is namespaced and PSR-4 autoloaded. Includes PHPStan and PHPCS (PSR-12) for code quality out of the box.
 
 ## Features
 
@@ -9,6 +9,7 @@ A modern WordPress theme that leverages Vite for asset bundling, Tailwind CSS v4
 - **TypeScript** - Type-safe scripts with strict mode enabled
 - **PHPStan Level 5** - Static analysis with WordPress-aware rules
 - **PHPCS + PSR-12** - PHP coding standards enforcement
+- **Blade Templates** - Laravel's Blade templating engine with layouts, sections, and includes
 - **Modular Architecture** - Organized file structure with clear separation of concerns
 - **Dual-Mode Asset Loading** - Automatic switching between dev and production
 - **WordPress Cleanup** - Removes unnecessary WordPress bloat
@@ -37,7 +38,7 @@ A modern WordPress theme that leverages Vite for asset bundling, Tailwind CSS v4
 Running `npm run setup` launches an interactive script that personalizes the starter theme for your project. It will:
 
 1. **Collect your theme info** — name, description, author, and author URL. A text domain and slug are derived automatically from the name in kebab-case.
-2. **Apply replacements across the codebase** — updates the `style.css` header, `package.json` name, `README.md` title, welcome page heading, and asset handle prefixes in `inc/assets.php`.
+2. **Apply replacements across the codebase** — updates the `style.css` header, `package.json` name, `README.md` title, welcome page heading, PHP namespace (e.g. `ViteStarterTheme` → `MyCoolTheme`), Composer autoload config, and asset handle prefixes.
 3. **Swap the default font** — optionally replaces Roboto with any [fontsource](https://fontsource.org) font. Uninstalls the old package, installs the new one, and updates both the import and `font-family` rule in `fonts.css`.
 4. **Remove the welcome page** — optionally deletes the demo welcome page and resets the index template to a blank starting point.
 5. **Clean up after itself** — optionally deletes `bin/setup.js` and removes the `setup` script from `package.json`.
@@ -108,11 +109,11 @@ Configuration: `.stylelintrc.json`
 ```
 theme-root/
 ├── functions.php              # Lightweight loader
-├── header.php                 # Template wrapper
-├── footer.php                 # Template wrapper
-├── index.php                  # Template wrapper
+├── header.php                 # WP stub (layout handled by Blade)
+├── footer.php                 # WP stub (layout handled by Blade)
+├── index.php                  # Delegates to Blade
 ├── style.css                  # Theme metadata
-├── composer.json              # PHP dependencies (PHPStan, PHPCS)
+├── composer.json              # PHP dependencies (Blade, PHPStan, PHPCS)
 ├── tsconfig.json              # TypeScript configuration
 ├── phpstan.neon               # PHPStan configuration
 ├── phpcs.xml                  # PHPCS configuration
@@ -121,17 +122,26 @@ theme-root/
 │   ├── setup.js               # Interactive setup script
 │   └── bundle.js              # Production zip bundler
 ├── inc/
-│   ├── assets.php             # Vite asset loading (dev + production)
-│   └── cleanup.php            # WordPress cleanup hooks
-├── template-parts/
-│   ├── header.php             # Actual header template
-│   ├── footer.php             # Actual footer template
-│   └── index.php              # Actual index template
-└── resources/
-    ├── scripts/               # TypeScript source files
-    ├── styles/                # CSS source files
-    ├── images/                # Image assets (must be referenced in CSS/JS to be bundled)
-    └── fonts/                 # Font files (optional)
+│   ├── Blade.php              # Blade service singleton
+│   ├── Helpers.php            # WordPress helper functions for Blade
+│   ├── Assets.php             # Vite asset loading (dev + production)
+│   ├── Cleanup.php            # WordPress cleanup hooks
+│   └── Directives/
+│       ├── Directive.php      # Abstract base directive
+│       ├── WordPressDirectives.php  # @wphead, @wpfooter, @wpbodyopen
+│       └── HtmlDirectives.php       # @langattributes, @bodyclass
+├── resources/
+│   ├── views/
+│   │   ├── layouts/
+│   │   │   └── app.blade.php  # Base HTML layout
+│   │   ├── index.blade.php    # Welcome page view
+│   │   └── partials/
+│   │       └── welcome/       # Welcome page sections
+│   ├── scripts/               # TypeScript source files
+│   ├── styles/                # CSS source files
+│   ├── images/                # Image assets
+│   └── fonts/                 # Font files (optional)
+└── storage/views/             # Blade compiled cache (gitignored)
 ```
 
 ## Adding Fonts
@@ -170,13 +180,13 @@ Create a production-ready `.zip` for WordPress installation:
 | `npm run bundle:quick` | Build + zip (skip linting) |
 | `npm run bundle:clean` | Remove the `bundled/` directory |
 
-The zip contains a `<theme-name>/` root folder with only the files WordPress needs — no `node_modules`, `vendor`, `resources`, `bin`, or config files.
+The zip contains a `<theme-name>/` root folder with only the files WordPress needs — no `node_modules`, `bin`, or config files. The `vendor/` directory (Blade runtime) is included with production-only dependencies.
 
 ## Important Notes
 
 - **Vite only bundles referenced assets** — images and fonts must be imported in CSS or JS entry points. Unreferenced files won't appear in the production build.
 - The theme automatically detects dev vs production mode based on manifest file existence.
-- All templates are in `template-parts/` for better organization.
+- Templates use Blade (`resources/views/`) with `@extends`, `@section`, and `@include` directives.
 
 ## License
 
