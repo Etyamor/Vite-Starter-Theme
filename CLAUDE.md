@@ -10,10 +10,12 @@ This is a WordPress theme that uses Vite for asset bundling and Tailwind CSS v4 
 
 - `npm run dev` - Start Vite development server with HMR (clears manifest before starting)
 - `npm run build` - Build production assets with Vite
-- `npm run lint` - Run PHPCS and PHPStan together
+- `npm run lint` - Run PHPCS, PHPStan, and Stylelint together
 - `npm run lint:php` - Check PHP against WordPress coding standards
 - `npm run lint:php:fix` - Auto-fix PHPCS violations
 - `npm run lint:types` - Run PHPStan static analysis (level 5)
+- `npm run lint:css` - Check CSS with Stylelint
+- `npm run lint:css:fix` - Auto-fix Stylelint violations
 - `npm run typecheck` - Run TypeScript type checking
 - `npm run bundle` - Lint + build + create production zip
 - `npm run bundle:quick` - Build + zip (skip linting)

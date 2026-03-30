@@ -32,9 +32,9 @@
             <div class="rounded-lg bg-green-900/50 p-3">
                 <code class="text-sm">npm run lint</code>
             </div>
-            <p class="text-green-50">Auto-fix PHP code style:</p>
+            <p class="text-green-50">CSS linting:</p>
             <div class="rounded-lg bg-green-900/50 p-3">
-                <code class="text-sm">npm run lint:php:fix</code>
+                <code class="text-sm">npm run lint:css</code>
             </div>
             <p class="text-green-50">TypeScript type checking:</p>
             <div class="rounded-lg bg-green-900/50 p-3">

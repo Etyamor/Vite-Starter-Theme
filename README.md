@@ -73,10 +73,12 @@ All linting commands are available as npm scripts:
 
 | Command | Description |
 |---|---|
-| `npm run lint` | Run PHPCS and PHPStan together |
+| `npm run lint` | Run PHPCS, PHPStan, and Stylelint together |
 | `npm run lint:php` | Check PHP code against WordPress coding standards |
 | `npm run lint:php:fix` | Auto-fix PHPCS violations where possible |
 | `npm run lint:types` | Run PHPStan static analysis (level 5) |
+| `npm run lint:css` | Check CSS with Stylelint |
+| `npm run lint:css:fix` | Auto-fix Stylelint violations where possible |
 | `npm run typecheck` | Run TypeScript type checking |
 
 ### PHPStan
@@ -96,6 +98,12 @@ Configuration: `phpcs.xml`
 Scripts use TypeScript with strict mode. The entry point is `resources/scripts/scripts.ts`. Vite handles transpilation — no extra build step needed.
 
 Configuration: `tsconfig.json`
+
+### Stylelint
+
+CSS is linted with [Stylelint](https://stylelint.io/) using the standard config, with rules adjusted for Tailwind CSS v4 at-rules and functions.
+
+Configuration: `.stylelintrc.json`
 
 ## Project Structure
 
