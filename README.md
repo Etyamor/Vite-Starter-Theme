@@ -10,7 +10,7 @@ A modern WordPress theme that leverages Vite for asset bundling, Tailwind CSS v4
 - **Tailwind CSS v4** - Latest Tailwind with native CSS layer support
 - **TypeScript** - Type-safe scripts with strict mode enabled
 - **PHPStan Level 5** - Static analysis with WordPress-aware rules
-- **PHPCS + WPCS** - WordPress coding standards enforcement
+- **PHPCS + PSR-12** - PHP coding standards enforcement
 - **Modular Architecture** - Organized file structure with clear separation of concerns
 - **Dual-Mode Asset Loading** - Automatic switching between dev and production
 - **WordPress Cleanup** - Removes unnecessary WordPress bloat
@@ -74,7 +74,7 @@ All linting commands are available as npm scripts:
 | Command | Description |
 |---|---|
 | `npm run lint` | Run PHPCS, PHPStan, and Stylelint together |
-| `npm run lint:php` | Check PHP code against WordPress coding standards |
+| `npm run lint:php` | Check PHP code against PSR-12 coding standards |
 | `npm run lint:php:fix` | Auto-fix PHPCS violations where possible |
 | `npm run lint:types` | Run PHPStan static analysis (level 5) |
 | `npm run lint:css` | Check CSS with Stylelint |
@@ -89,7 +89,7 @@ Configuration: `phpstan.neon`
 
 ### PHPCS
 
-Code style is enforced using the [WordPress Coding Standards](https://github.com/WordPress/WordPress-Coding-Standards) ruleset with PHP compatibility checks.
+Code style is enforced using the [PSR-12](https://www.php-fig.org/psr/psr-12/) standard with PHP compatibility checks.
 
 Configuration: `phpcs.xml`
 

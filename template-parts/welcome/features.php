@@ -37,7 +37,7 @@
             </svg>
         </div>
         <h3 class="mb-2 text-xl font-bold text-gray-800">Code Quality</h3>
-        <p class="text-gray-600">PHPStan level 5 static analysis and PHPCS with WordPress coding standards built in.</p>
+        <p class="text-gray-600">PHPStan level 5 static analysis and PHPCS with PSR-12 coding standards built in.</p>
     </div>
 
     <div class="rounded-2xl bg-white p-6 shadow-lg transition-all hover:shadow-xl">

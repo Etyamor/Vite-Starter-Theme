@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Footer template.
  *

@@ -10,15 +10,9 @@
     <arg name="colors"/>
     <arg value="sp"/>
 
-    <config name="minimum_supported_wp_version" value="6.5"/>
     <config name="testVersion" value="8.1-"/>
     <config name="ignore_warnings_on_exit" value="1"/>
 
-    <rule ref="WordPress">
-        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
-        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
-        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent"/>
-    </rule>
-
-    <rule ref="PHPCompatibilityWP"/>
+    <rule ref="PSR12"/>
+    <rule ref="PHPCompatibility"/>
 </ruleset>
