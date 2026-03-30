@@ -1,8 +1,6 @@
 # Vite Starter Theme
 
-![Screenshot](screenshot.png)
-
-A modern WordPress theme that leverages Vite for asset bundling, Tailwind CSS v4 for styling, and TypeScript for scripts. Includes PHPStan and PHPCS for code quality out of the box.
+A modern WordPress theme that leverages Vite for asset bundling, Tailwind CSS v4 for styling, and TypeScript for scripts. Includes PHPStan and PHPCS (PSR-12) for code quality out of the box.
 
 ## Features
 
