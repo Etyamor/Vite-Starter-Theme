@@ -158,6 +158,7 @@ async function main() {
     'inc/Directives/HtmlDirectives.php',
     'functions.php',
     'index.php',
+    '_ide_helper_blade.php',
   ];
   for (const file of namespaceFiles) {
     replaceInFile(file, [
